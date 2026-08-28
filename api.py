@@ -8,7 +8,10 @@ import pandas as pd
 
 app = FastAPI(title="API de prédiction de prix immobilier - Nièvre")
 
-origins = os.environ.get("CORS_ORIGINS", "*").split(",")
+origins = os.environ.get(
+    "CORS_ORIGINS",
+    "https://cecilellouisy.github.io"
+).split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -22,7 +25,7 @@ modele = joblib.load("model.joblib")
 class Bien(BaseModel):
     surface_bati: float = Field(gt=0, le=10000)
     nombre_pieces: int = Field(gt=0, le=50)
-    surface_terrain: float = Field(gt=0, le=100000)
+    surface_terrain: float = Field(ge=0, le=100000)
     est_maison: bool
 
 

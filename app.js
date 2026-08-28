@@ -14,9 +14,19 @@ function formatPrice(n) {
     }).format(n);
 }
 
+function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+}
+
 function showResult(html, type) {
     resultDiv.className = "result visible " + type;
     resultDiv.innerHTML = html;
+}
+
+function showError(message) {
+    showResult(escapeHtml(message), "error");
 }
 
 form.addEventListener("submit", async function (e) {
@@ -27,8 +37,8 @@ form.addEventListener("submit", async function (e) {
     const surfaceTerrain = parseFloat(document.getElementById("surface-terrain").value);
     const estMaison = document.querySelector('input[name="type_bien"]:checked').value === "true";
 
-    if (!surfaceBati || !nbPieces || !surfaceTerrain) {
-        showResult("Veuillez remplir tous les champs.", "error");
+    if (!surfaceBati || !nbPieces || isNaN(surfaceTerrain)) {
+        showError("Veuillez remplir tous les champs.");
         return;
     }
 
@@ -40,7 +50,7 @@ form.addEventListener("submit", async function (e) {
     };
 
     btnSubmit.disabled = true;
-    btnSubmit.innerHTML = '<span class="spinner"></span>Estimation…';
+    btnSubmit.innerHTML = '<span class="spinner"></span> Estimation…';
     resultDiv.className = "result";
 
     try {
@@ -52,19 +62,23 @@ form.addEventListener("submit", async function (e) {
 
         if (!resp.ok) {
             const err = await resp.json().catch(function () { return null; });
-            throw new Error(err?.detail || "Erreur serveur (" + resp.status + ")");
+            var detail = (err && typeof err.detail === "string") ? err.detail : "";
+            throw new Error(detail || "Erreur serveur (" + resp.status + ")");
         }
 
         const result = await resp.json();
         showResult(
             '<div class="price-label">Prix estimé</div>' +
-            '<div class="price">' + formatPrice(result.prix_predit_euros) + "</div>",
+            '<div class="price">' + formatPrice(result.prix_predit_euros) + "</div>" +
+            '<div class="disclaimer">Estimation indicative basée sur un modèle expérimental.</div>',
             "success"
         );
     } catch (err) {
-        showResult(err.message || "Impossible de contacter le serveur.", "error");
+        showError(err.message || "Impossible de contacter le serveur.");
     } finally {
         btnSubmit.disabled = false;
-        btnSubmit.textContent = "Estimer le prix";
+        btnSubmit.innerHTML =
+            '<svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10V6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"/><polyline points="9 14 12 17 15 14"/><line x1="12" y1="12" x2="12" y2="17"/></svg>' +
+            "Estimer le prix";
     }
 });
