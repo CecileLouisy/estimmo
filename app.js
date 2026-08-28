@@ -1,6 +1,6 @@
 "use strict";
 
-const API_URL = "https://api-immobilier-nievre.onrender.com";
+const API_URL = "https://estimmo.onrender.com";
 
 const form = document.getElementById("form-estimation");
 const resultDiv = document.getElementById("result");
