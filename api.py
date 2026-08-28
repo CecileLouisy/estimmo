@@ -10,12 +10,12 @@ app = FastAPI(title="API de prédiction de prix immobilier - Nièvre")
 
 origins = os.environ.get(
     "CORS_ORIGINS",
-    "https://cecilellouisy.github.io"
+    "https://cecilelouisy.github.io"
 ).split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_methods=["POST"],
+    allow_methods=["POST", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 
