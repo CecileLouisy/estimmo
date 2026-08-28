@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimateur immobilier — Nièvre</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Estimateur de prix immobilier</h1>
+        <p>Obtenez une estimation du prix d'un bien dans la Nièvre (58) grâce à un modèle de Machine Learning.</p>
+    </header>
+
+    <main class="card">
+        <form id="form-estimation" novalidate>
+            <div class="field">
+                <label for="type-maison">Type de bien</label>
+                <div class="toggle-group">
+                    <input type="radio" id="type-maison" name="type_bien" value="true" checked>
+                    <label for="type-maison">Maison</label>
+                    <input type="radio" id="type-appart" name="type_bien" value="false">
+                    <label for="type-appart">Appartement</label>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="surface-bati">Surface habitable <span class="unit">(m²)</span></label>
+                <input type="number" id="surface-bati" name="surface_bati" min="1" max="10000" step="1" placeholder="90" required>
+            </div>
+
+            <div class="field">
+                <label for="nb-pieces">Nombre de pièces</label>
+                <input type="number" id="nb-pieces" name="nombre_pieces" min="1" max="50" step="1" placeholder="4" required>
+            </div>
+
+            <div class="field">
+                <label for="surface-terrain">Surface du terrain <span class="unit">(m²)</span></label>
+                <input type="number" id="surface-terrain" name="surface_terrain" min="1" max="100000" step="1" placeholder="300" required>
+            </div>
+
+            <button type="submit" id="btn-submit">Estimer le prix</button>
+        </form>
+
+        <div id="result" class="result" role="status" aria-live="polite"></div>
+    </main>
+
+    <footer>
+        Projet ML — Module 1 · Modèle entraîné sur les données DVF Nièvre 2025
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
